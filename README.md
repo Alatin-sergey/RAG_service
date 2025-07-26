@@ -28,8 +28,8 @@
 1.  **Клонируйте репозиторий:**
 
     ```bash
-    git clone https://github.com/Alatin-sergey/Rag_service_test.git
-    cd Rag_service_test
+    git clone https://github.com/Alatin-sergey/Rag_service.git
+    cd Rag_service
     ```
 
 2.  **Создайте файл `.env`:**
