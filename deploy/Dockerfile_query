@@ -1,0 +1,17 @@
+FROM torch_image
+
+WORKDIR /app
+
+RUN pip install --upgrade pip
+
+COPY ./requirements/req_qa_service.txt ./requirements.txt
+RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
+
+COPY ./query_service/query_main.py ./query_main.py
+COPY ./query_service/prompts.py ./prompts.py
+COPY ./query_service/utils ./utils
+COPY ./.env ./.env
+COPY ./runners/query_service.sh ./query_service.sh
+
+RUN chmod +x ./query_service.sh
+EXPOSE 8050

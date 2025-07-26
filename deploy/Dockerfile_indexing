@@ -1,0 +1,16 @@
+FROM torch_image
+
+WORKDIR /app
+
+RUN pip install --upgrade pip
+
+COPY ./requirements/req_indexing_service.txt ./requirements.txt
+RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
+
+COPY ./indexing_service/indexing_main.py ./indexing_main.py
+COPY ./indexing_service/utils ./utils
+COPY ./.env ./.env
+COPY ./runners/indexing_service.sh ./indexing_service.sh
+
+RUN chmod +x ./indexing_service.sh
+EXPOSE 8050

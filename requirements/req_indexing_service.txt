@@ -1,0 +1,10 @@
+llama_index==0.12.51
+llama-index-embeddings-huggingface==0.5.5
+transformers==4.53.3
+sentence_transformers==5.0.0
+dotenv==0.9.9
+loguru==0.7.3
+uvicorn==0.34.3
+fastapi==0.115.13
+pydantic==2.11.7
+qdrant-client==1.15.0

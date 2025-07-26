@@ -1,0 +1,15 @@
+FROM python:3.9-slim-buster
+
+WORKDIR /app
+
+RUN pip install --upgrade pip
+
+COPY ./requirements/req_backend_service.txt ./requirements.txt
+RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
+
+COPY ./src/backend.py ./backend.py
+COPY ./.env ./.env
+COPY ./runners/backend.sh ./backend.sh
+
+RUN chmod +x ./backend.sh
+EXPOSE 8001

@@ -1,0 +1,65 @@
+services:
+  database:
+    image: qdrant/qdrant:latest
+    container_name: database
+    env_file:
+      - .env
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    restart: always
+    volumes:
+      - database_data:/qdrant/storage
+
+  indexing_service:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile_indexing
+    container_name: indexing_service
+    env_file:
+      - .env
+    entrypoint: /bin/bash
+    ports:
+      - "${INDEXING_PORT}:${INDEXING_PORT}"
+    command: ["/app/indexing_service.sh"]
+    restart: always
+    depends_on:
+      - database
+    volumes:
+      - ${LOCAL_HF_PATH}:/app/hf_cache
+
+
+  qa_service:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile_query
+    container_name: qa_service
+    env_file:
+      - .env
+    entrypoint: /bin/bash
+    ports:
+      - "${QUERY_PORT}:${QUERY_PORT}"
+    command: ["/app/query_service.sh"]
+    restart: always
+    depends_on:
+      - indexing_service
+    volumes:
+      - ${LOCAL_HF_PATH}:/app/hf_cache
+
+  backend:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile_backend
+    container_name: backend
+    env_file:
+      - .env
+    entrypoint: /bin/bash
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    command: ["/app/backend.sh"]
+    restart: always
+    depends_on:
+      - indexing_service
+      - qa_service
+
+volumes:
+  database_data:
